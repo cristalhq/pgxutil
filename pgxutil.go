@@ -13,12 +13,6 @@ type DB struct {
 	pool *pgxpool.Pool
 }
 
-var readOnlyOpts = pgx.TxOptions{
-	IsoLevel:       pgx.ReadCommitted,
-	AccessMode:     pgx.ReadOnly,
-	DeferrableMode: "",
-}
-
 // New creates a new wrapper for pgx.
 func New(pool *pgxpool.Pool) (*DB, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
