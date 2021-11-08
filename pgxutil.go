@@ -2,6 +2,7 @@ package pgxutil
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -38,10 +39,11 @@ func (db *DB) InReadOnlyTx(ctx context.Context, fn func(tx pgx.Tx) error) error 
 	return db.inTx(ctx, pgx.ReadCommitted, pgx.ReadOnly, fn)
 }
 
-func (db *DB) inTx(ctx context.Context, level pgx.TxIsoLevel, access pgx.TxAccessMode, fn func(tx pgx.Tx) error) error {
-	conn, err := db.pool.Acquire(ctx)
-	if err != nil {
-		return fmt.Errorf("acquiring connection: %w", err)
+func (db *DB) inTx(ctx context.Context, level pgx.TxIsoLevel, access pgx.TxAccessMode,
+	fn func(tx pgx.Tx) error) (err error) {
+	conn, errAcq := db.pool.Acquire(ctx)
+	if errAcq != nil {
+		return fmt.Errorf("acquiring connection: %w", errAcq)
 	}
 	defer conn.Release()
 
@@ -49,14 +51,22 @@ func (db *DB) inTx(ctx context.Context, level pgx.TxIsoLevel, access pgx.TxAcces
 		IsoLevel:   level,
 		AccessMode: access,
 	}
-	tx, err := conn.BeginTx(ctx, opts)
-	if err != nil {
-		return fmt.Errorf("starting transaction: %w", err)
+
+	tx, errBegin := conn.BeginTx(ctx, opts)
+	if errBegin != nil {
+		return fmt.Errorf("starting transaction: %w", errBegin)
 	}
 
+	defer func() {
+		errRollback := tx.Rollback(ctx)
+		if !(errRollback == nil || errors.Is(errRollback, pgx.ErrTxClosed)) {
+			err = errRollback
+		}
+	}()
+
 	if err := fn(tx); err != nil {
-		if err1 := tx.Rollback(ctx); err1 != nil {
-			return fmt.Errorf("rolling back transaction: %v (original error: %w)", err1, err)
+		if errRollback := tx.Rollback(ctx); errRollback != nil {
+			return fmt.Errorf("rolling back transaction: %v (original error: %w)", errRollback, err)
 		}
 		return err
 	}
