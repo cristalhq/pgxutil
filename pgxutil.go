@@ -29,13 +29,13 @@ func New(pool *pgxpool.Pool) (*DB, error) {
 	return db, nil
 }
 
-// InTx runs the given function within a transaction with a given isolation level.
-func (db *DB) InTx(ctx context.Context, level pgx.TxIsoLevel, fn func(tx pgx.Tx) error) error {
+// InWriteTx runs the given function within a transaction with a given isolation level.
+func (db *DB) InWriteTx(ctx context.Context, level pgx.TxIsoLevel, fn func(tx pgx.Tx) error) error {
 	return db.inTx(ctx, level, "", fn)
 }
 
-// InReadOnlyTx runs the given function within a read-only transaction with read commited isolation level.
-func (db *DB) InReadOnlyTx(ctx context.Context, fn func(tx pgx.Tx) error) error {
+// InReadTx runs the given function within a read-only transaction with read commited isolation level.
+func (db *DB) InReadTx(ctx context.Context, fn func(tx pgx.Tx) error) error {
 	return db.inTx(ctx, pgx.ReadCommitted, pgx.ReadOnly, fn)
 }
 

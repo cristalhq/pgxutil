@@ -21,7 +21,7 @@ func Example() {
 
 	// to make transaction with a given isolation level
 	level := pgx.Serializable
-	errTx := db.InTx(ctx, level, func(tx pgx.Tx) error {
+	errTx := db.InWriteTx(ctx, level, func(tx pgx.Tx) error {
 		// TODO: good query with tx
 		return nil
 	})
@@ -30,7 +30,7 @@ func Example() {
 	}
 
 	// to make read-only transaction with a read committed isolation level
-	errRead := db.InReadOnlyTx(ctx, func(tx pgx.Tx) error {
+	errRead := db.InReadTx(ctx, func(tx pgx.Tx) error {
 		// TODO: good read-only query with tx
 		return nil
 	})
