@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jackc/pgx/v4"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type DB struct {
@@ -54,7 +54,7 @@ func (db *DB) inTx(ctx context.Context, level pgx.TxIsoLevel, access pgx.TxAcces
 
 	tx, errBegin := conn.BeginTx(ctx, opts)
 	if errBegin != nil {
-		return fmt.Errorf("starting transaction: %w", errBegin)
+		return fmt.Errorf("begin tx: %w", errBegin)
 	}
 
 	defer func() {
@@ -66,13 +66,13 @@ func (db *DB) inTx(ctx context.Context, level pgx.TxIsoLevel, access pgx.TxAcces
 
 	if err := fn(tx); err != nil {
 		if errRollback := tx.Rollback(ctx); errRollback != nil {
-			return fmt.Errorf("rolling back transaction: %v (original error: %w)", errRollback, err)
+			return fmt.Errorf("rollback tx: %v (original: %w)", errRollback, err)
 		}
 		return err
 	}
 
 	if err := tx.Commit(ctx); err != nil {
-		return fmt.Errorf("committing transaction: %w", err)
+		return fmt.Errorf("commit tx: %w", err)
 	}
 	return nil
 }
