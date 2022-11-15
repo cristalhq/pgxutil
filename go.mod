@@ -3,7 +3,7 @@ module github.com/cristalhq/pgxutil
 go 1.19
 
 require (
-	github.com/cristalhq/builq v0.7.0
+	github.com/cristalhq/builq v0.7.1
 	github.com/jackc/pgx/v5 v5.1.0
 )
 
