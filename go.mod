@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/cristalhq/builq v0.7.0
-	github.com/jackc/pgx/v5 v5.1.0
+	github.com/jackc/pgx/v5 v5.1.1
 )
 
 require (
