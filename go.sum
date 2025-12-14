@@ -1,5 +1,5 @@
-github.com/cristalhq/builq v0.7.0 h1:I7VjZIhTGeA8/Rdmj7vNmWlQjsT7n4ZMMU0EjCw8Bxg=
-github.com/cristalhq/builq v0.7.0/go.mod h1:AEZed4D9q/Ru3MRON0P4ZWMDpQhDnGDhS4y8n1RegMc=
+github.com/cristalhq/builq v0.8.0 h1:8etl3pNmTDB1kK2iQmnGAqZtqy455sfVhyknThELrSY=
+github.com/cristalhq/builq v0.8.0/go.mod h1:AEZed4D9q/Ru3MRON0P4ZWMDpQhDnGDhS4y8n1RegMc=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
