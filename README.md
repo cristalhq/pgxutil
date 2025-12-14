@@ -1,3 +1,5 @@
+ARCHIVED, see [https://github.com/cristalhq](https://github.com/cristalhq)
+
 # pgxutil
 
 [![build-img]][build-url]
